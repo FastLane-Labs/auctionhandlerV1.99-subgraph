@@ -14,23 +14,23 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - CustomPaymentProcessorPaid
+        # - CustomPaymentProcessorPaid
         - RelayFastBid
         - RelayFeeCollected
         - RelayFlashBid
         - RelayFlashBidWithRefund
-        - RelayInvestigateOutcome
-        - RelayProcessingPaidValidator
-        - RelaySimulatedFlashBid
-        - RelayValidatorPayeeUpdated
-        - RelayWithdrawStuckERC20
-        - RelayWithdrawStuckNativeToken
+        # - RelayInvestigateOutcome
+        # - RelayProcessingPaidValidator
+        # - RelaySimulatedFlashBid
+        # - RelayValidatorPayeeUpdated
+        # - RelayWithdrawStuckERC20
+        # - RelayWithdrawStuckNativeToken
       abis:
         - name: FastLaneAuctionHandler
           file: ./abis/FastLaneAuctionHandler.json
       eventHandlers:
-        - event: CustomPaymentProcessorPaid(indexed address,indexed address,indexed address,uint256,uint256,uint256)
-          handler: handleCustomPaymentProcessorPaid
+        # - event: CustomPaymentProcessorPaid(indexed address,indexed address,indexed address,uint256,uint256,uint256)
+        #   handler: handleCustomPaymentProcessorPaid
         - event: RelayFastBid(indexed address,indexed address,bool,uint256,address)
           handler: handleRelayFastBid
         - event: RelayFeeCollected(indexed address,indexed address,uint256)
@@ -39,16 +39,16 @@ dataSources:
           handler: handleRelayFlashBid
         - event: RelayFlashBidWithRefund(indexed address,indexed bytes32,indexed address,uint256,uint256,address,uint256,address)
           handler: handleRelayFlashBidWithRefund
-        - event: RelayInvestigateOutcome(indexed address,indexed address,uint256,uint256,uint256,uint256,uint256)
-          handler: handleRelayInvestigateOutcome
-        - event: RelayProcessingPaidValidator(indexed address,uint256,indexed address)
-          handler: handleRelayProcessingPaidValidator
-        - event: RelaySimulatedFlashBid(indexed address,uint256,indexed bytes32,indexed address,address)
-          handler: handleRelaySimulatedFlashBid
-        - event: RelayValidatorPayeeUpdated(address,address,indexed address)
-          handler: handleRelayValidatorPayeeUpdated
-        - event: RelayWithdrawStuckERC20(indexed address,indexed address,uint256)
-          handler: handleRelayWithdrawStuckERC20
-        - event: RelayWithdrawStuckNativeToken(indexed address,uint256)
-          handler: handleRelayWithdrawStuckNativeToken
+        # - event: RelayInvestigateOutcome(indexed address,indexed address,uint256,uint256,uint256,uint256,uint256)
+        #   handler: handleRelayInvestigateOutcome
+        # - event: RelayProcessingPaidValidator(indexed address,uint256,indexed address)
+        #   handler: handleRelayProcessingPaidValidator
+        # - event: RelaySimulatedFlashBid(indexed address,uint256,indexed bytes32,indexed address,address)
+        #   handler: handleRelaySimulatedFlashBid
+        # - event: RelayValidatorPayeeUpdated(address,address,indexed address)
+        #   handler: handleRelayValidatorPayeeUpdated
+        # - event: RelayWithdrawStuckERC20(indexed address,indexed address,uint256)
+        #   handler: handleRelayWithdrawStuckERC20
+        # - event: RelayWithdrawStuckNativeToken(indexed address,uint256)
+        #   handler: handleRelayWithdrawStuckNativeToken
       file: ./src/fast-lane-auction-handler.ts
