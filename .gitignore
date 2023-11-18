@@ -10,7 +10,6 @@ cache
 out
 build
 .history
-subgraph.yaml
 subgraph.local.yaml
 subgraph.polygon.yaml
 .DS_Store
