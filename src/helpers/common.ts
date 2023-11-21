@@ -1,10 +1,4 @@
-import {
-  Bytes,
-  TypedMap,
-  JSONValue,
-  BigInt,
-  BigDecimal,
-} from "@graphprotocol/graph-ts";
+import { Bytes, TypedMap, JSONValue, BigInt, BigDecimal } from "@graphprotocol/graph-ts";
 
 export const ADDRESS_ZERO_STR = "0x0000000000000000000000000000000000000000";
 
@@ -30,10 +24,7 @@ export const FAST_BIDS = "fastBids";
 
 export const STATS_ID = Bytes.fromUTF8("MainStats");
 
-export function getStringValue(
-  obj: TypedMap<string, JSONValue>,
-  key: string
-): string {
+export function getStringValue(obj: TypedMap<string, JSONValue>, key: string): string {
   if (obj.isSet(key)) {
     const val = obj.get(key);
     if (val && !val.isNull()) {
@@ -43,10 +34,7 @@ export function getStringValue(
   return "";
 }
 
-export function getBigIntValue(
-  obj: TypedMap<string, JSONValue>,
-  key: string
-): BigInt {
+export function getBigIntValue(obj: TypedMap<string, JSONValue>, key: string): BigInt {
   if (obj.isSet(key)) {
     const val = obj.get(key);
     if (val && !val.isNull()) {

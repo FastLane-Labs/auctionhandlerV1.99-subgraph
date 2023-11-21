@@ -1,14 +1,8 @@
 import { Bytes } from "@graphprotocol/graph-ts";
 import { ZERO, ZERO_INT, STATS_ID } from "../common";
-import {
-  Collection,
-  DailyCollectionSnapshotGlobal,
-  DailyValidatorSnapshot,
-} from "../../../generated/schema";
+import { Collection, DailyCollectionSnapshotGlobal, DailyValidatorSnapshot } from "../../../generated/schema";
 
-export function loadOrCreateDailyCollectionSnapshotGlobal(
-  id: string
-): DailyCollectionSnapshotGlobal {
+export function loadOrCreateDailyCollectionSnapshotGlobal(id: string): DailyCollectionSnapshotGlobal {
   let snap = DailyCollectionSnapshotGlobal.load(id);
   if (!snap) {
     snap = new DailyCollectionSnapshotGlobal(id);
@@ -46,10 +40,7 @@ export function loadOrCreateDailyCollectionSnapshotGlobal(
   return snap;
 }
 
-export function loadOrCreateDailyValidatorSnapshot(
-  id: string,
-  validatorAddress: Bytes
-): DailyValidatorSnapshot {
+export function loadOrCreateDailyValidatorSnapshot(id: string, validatorAddress: Bytes): DailyValidatorSnapshot {
   let snap = DailyValidatorSnapshot.load(id);
   if (!snap) {
     snap = new DailyValidatorSnapshot(id);
@@ -59,6 +50,7 @@ export function loadOrCreateDailyValidatorSnapshot(
     bundlesCollection.timestamp = ZERO_INT;
     bundlesCollection.rangeVolume = ZERO;
     bundlesCollection.rangeTransactions = ZERO_INT;
+    bundlesCollection.validators = [];
     bundlesCollection.topBid = ZERO;
     bundlesCollection.save();
     snap.bundlesCollection = bundlesCollection.id;
@@ -67,6 +59,7 @@ export function loadOrCreateDailyValidatorSnapshot(
     bundlesWithRefundCollection.timestamp = ZERO_INT;
     bundlesWithRefundCollection.rangeVolume = ZERO;
     bundlesWithRefundCollection.rangeTransactions = ZERO_INT;
+    bundlesWithRefundCollection.validators = [];
     bundlesWithRefundCollection.topBid = ZERO;
     bundlesWithRefundCollection.save();
     snap.bundlesWithRefundCollection = bundlesWithRefundCollection.id;
@@ -75,6 +68,7 @@ export function loadOrCreateDailyValidatorSnapshot(
     fastBidsCollection.timestamp = ZERO_INT;
     fastBidsCollection.rangeVolume = ZERO;
     fastBidsCollection.rangeTransactions = ZERO_INT;
+    fastBidsCollection.validators = [];
     fastBidsCollection.topBid = ZERO;
     fastBidsCollection.save();
     snap.fastBidsCollection = fastBidsCollection.id;

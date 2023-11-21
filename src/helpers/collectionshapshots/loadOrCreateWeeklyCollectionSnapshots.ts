@@ -1,20 +1,8 @@
 import { Address, BigInt, Bytes, log } from "@graphprotocol/graph-ts";
-import {
-  ZERO,
-  ZERO_INT,
-  ZERO_BIG_DEC,
-  STATS_ID,
-  ADDRESS_ZERO,
-} from "../common";
-import {
-  Collection,
-  WeeklyCollectionSnapshotGlobal,
-  WeeklyValidatorSnapshot,
-} from "../../../generated/schema";
+import { ZERO, ZERO_INT, ZERO_BIG_DEC, STATS_ID, ADDRESS_ZERO } from "../common";
+import { Collection, WeeklyCollectionSnapshotGlobal, WeeklyValidatorSnapshot } from "../../../generated/schema";
 
-export function loadOrCreateWeeklyCollectionSnapshotGlobal(
-  id: string
-): WeeklyCollectionSnapshotGlobal {
+export function loadOrCreateWeeklyCollectionSnapshotGlobal(id: string): WeeklyCollectionSnapshotGlobal {
   let snap = WeeklyCollectionSnapshotGlobal.load(id);
   if (!snap) {
     snap = new WeeklyCollectionSnapshotGlobal(id);
@@ -52,10 +40,7 @@ export function loadOrCreateWeeklyCollectionSnapshotGlobal(
   return snap;
 }
 
-export function loadOrCreateWeeklyValidatorSnapshot(
-  id: string,
-  validatorAddress: Bytes
-): WeeklyValidatorSnapshot {
+export function loadOrCreateWeeklyValidatorSnapshot(id: string, validatorAddress: Bytes): WeeklyValidatorSnapshot {
   let snap = WeeklyValidatorSnapshot.load(id);
   if (!snap) {
     snap = new WeeklyValidatorSnapshot(id);
@@ -65,6 +50,7 @@ export function loadOrCreateWeeklyValidatorSnapshot(
     bundlesCollection.timestamp = ZERO_INT;
     bundlesCollection.rangeVolume = ZERO;
     bundlesCollection.rangeTransactions = ZERO_INT;
+    bundlesCollection.validators = [];
     bundlesCollection.topBid = ZERO;
     bundlesCollection.save();
     snap.bundlesCollection = bundlesCollection.id;
@@ -73,6 +59,7 @@ export function loadOrCreateWeeklyValidatorSnapshot(
     bundlesWithRefundCollection.timestamp = ZERO_INT;
     bundlesWithRefundCollection.rangeVolume = ZERO;
     bundlesWithRefundCollection.rangeTransactions = ZERO_INT;
+    bundlesWithRefundCollection.validators = [];
     bundlesWithRefundCollection.topBid = ZERO;
     bundlesWithRefundCollection.save();
     snap.bundlesWithRefundCollection = bundlesWithRefundCollection.id;
@@ -81,6 +68,7 @@ export function loadOrCreateWeeklyValidatorSnapshot(
     fastBidsCollection.timestamp = ZERO_INT;
     fastBidsCollection.rangeVolume = ZERO;
     fastBidsCollection.rangeTransactions = ZERO_INT;
+    fastBidsCollection.validators = [];
     fastBidsCollection.topBid = ZERO;
     fastBidsCollection.save();
     snap.fastBidsCollection = fastBidsCollection.id;

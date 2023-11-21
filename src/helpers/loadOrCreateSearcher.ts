@@ -26,9 +26,7 @@ export function loadOrCreateSearcher(searcherAddress: Bytes): Searcher {
     searcher.save();
 
     const stats = loadOrCreateGlobalStats();
-    stats.totalUniqueSearchers = stats.totalUniqueSearchers.plus(
-      BigInt.fromI32(1)
-    );
+    stats.totalUniqueSearchers = stats.totalUniqueSearchers.plus(BigInt.fromI32(1));
     stats.save();
   }
   return searcher;

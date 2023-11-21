@@ -1,14 +1,8 @@
 import { Bytes } from "@graphprotocol/graph-ts";
 import { ZERO, ZERO_INT, STATS_ID } from "../common";
-import {
-  Collection,
-  HourlyCollectionSnapshotGlobal,
-  HourlyValidatorSnapshot,
-} from "../../../generated/schema";
+import { Collection, HourlyCollectionSnapshotGlobal, HourlyValidatorSnapshot } from "../../../generated/schema";
 
-export function loadOrCreateHourlyCollectionSnapshotGlobal(
-  id: string
-): HourlyCollectionSnapshotGlobal {
+export function loadOrCreateHourlyCollectionSnapshotGlobal(id: string): HourlyCollectionSnapshotGlobal {
   let snap = HourlyCollectionSnapshotGlobal.load(id);
   if (!snap) {
     snap = new HourlyCollectionSnapshotGlobal(id);
@@ -46,10 +40,7 @@ export function loadOrCreateHourlyCollectionSnapshotGlobal(
   return snap;
 }
 
-export function loadOrCreateHourlyValidatorSnapshot(
-  id: string,
-  validatorAddress: Bytes
-): HourlyValidatorSnapshot {
+export function loadOrCreateHourlyValidatorSnapshot(id: string, validatorAddress: Bytes): HourlyValidatorSnapshot {
   let snap = HourlyValidatorSnapshot.load(id);
   if (!snap) {
     snap = new HourlyValidatorSnapshot(id);
@@ -59,6 +50,7 @@ export function loadOrCreateHourlyValidatorSnapshot(
     bundlesCollection.timestamp = ZERO_INT;
     bundlesCollection.rangeVolume = ZERO;
     bundlesCollection.rangeTransactions = ZERO_INT;
+    bundlesCollection.validators = [];
     bundlesCollection.topBid = ZERO;
     bundlesCollection.save();
     snap.bundlesCollection = bundlesCollection.id;
@@ -67,6 +59,7 @@ export function loadOrCreateHourlyValidatorSnapshot(
     bundlesWithRefundCollection.timestamp = ZERO_INT;
     bundlesWithRefundCollection.rangeVolume = ZERO;
     bundlesWithRefundCollection.rangeTransactions = ZERO_INT;
+    bundlesWithRefundCollection.validators = [];
     bundlesWithRefundCollection.topBid = ZERO;
     bundlesWithRefundCollection.save();
     snap.bundlesWithRefundCollection = bundlesWithRefundCollection.id;
@@ -75,6 +68,7 @@ export function loadOrCreateHourlyValidatorSnapshot(
     fastBidsCollection.timestamp = ZERO_INT;
     fastBidsCollection.rangeVolume = ZERO;
     fastBidsCollection.rangeTransactions = ZERO_INT;
+    fastBidsCollection.validators = [];
     fastBidsCollection.topBid = ZERO;
     fastBidsCollection.save();
     snap.fastBidsCollection = fastBidsCollection.id;
