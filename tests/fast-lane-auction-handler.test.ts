@@ -116,7 +116,7 @@ describe("Describe entity assertions", () => {
     );
     handleRelayFlashBidWithRefund(newRelayFlashBidWithRefundEvent);
 
-    // Entity
+    // Event
     let entityId = newRelayFlashBidWithRefundEvent.transaction.hash
       .concatI32(newRelayFlashBidWithRefundEvent.logIndex.toI32())
       .toHexString();
@@ -179,7 +179,7 @@ describe("Describe entity assertions", () => {
     let newRelayFastBidEvent = createRelayFastBidEvent(ADDRESS_0, ADDRESS_1, true, BigInt.fromI32(200), ADDRESS_2);
     handleRelayFastBid(newRelayFastBidEvent);
 
-    // Entity
+    // Event
     let entityId = newRelayFastBidEvent.transaction.hash.concatI32(newRelayFastBidEvent.logIndex.toI32()).toHexString();
     assert.entityCount("RelayFastBid", 1);
     assert.fieldEquals("RelayFastBid", entityId, "sender", ADDRESS_0.toHexString());
