@@ -1,20 +1,136 @@
-type CustomPaymentProcessorPaid @entity(immutable: true) {
+type GlobalStat @entity {
   id: Bytes!
-  payor: Bytes! # address
-  payee: Bytes! # address
-  paymentProcessor: Bytes! # address
-  totalAmount: BigInt! # uint256
-  startBlock: BigInt! # uint256
-  endBlock: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+
+  totalExecutedBundlesCount: BigInt!
+  totalExecutedBundlesWithRefundCount: BigInt!
+  totalExecutedFastBidsCount: BigInt!
+
+  totalValidatorsPaid: BigInt!
+
+  totalUniqueSearchers: BigInt!
+  
+  hourlyCollectionSnapshotGlobal: [HourlyCollectionSnapshotGlobal!]! @derivedFrom(field: "target")
+  dailyCollectionSnapshotGlobal: [DailyCollectionSnapshotGlobal!]! @derivedFrom(field: "target")
+  weeklyCollectionSnapshotGlobal: [WeeklyCollectionSnapshotGlobal!]! @derivedFrom(field: "target")
+}
+
+type Collection @entity {
+  id: ID!
+  timestamp: Int!
+  rangeVolume: BigInt!
+  validators: [Validator!]!
+  rangeTransactions: Int
+  topBid: BigInt!
+}
+
+type HourlyCollectionSnapshotGlobal @entity {
+  "The hour"
+  id: ID!
+  target: GlobalStat!
+  bundlesCollection: Collection!
+  bundlesWithRefundCollection: Collection!
+  fastBidsCollection: Collection!
+}
+
+type DailyCollectionSnapshotGlobal @entity {
+  "The day"
+  id: ID!
+  target: GlobalStat!
+  bundlesCollection: Collection!
+  bundlesWithRefundCollection: Collection!
+  fastBidsCollection: Collection!
+}
+
+type WeeklyCollectionSnapshotGlobal @entity {
+  "The week"
+  id: ID!
+  target: GlobalStat!
+  bundlesCollection: Collection!
+  bundlesWithRefundCollection: Collection!
+  fastBidsCollection: Collection!
+}
+
+type HourlyValidatorSnapshot @entity {
+  "The hour"
+  id: ID!
+  target: Validator!
+  bundlesCollection: Collection!
+  bundlesWithRefundCollection: Collection!
+  fastBidsCollection: Collection!
+}
+
+type DailyValidatorSnapshot @entity {
+  "The day"
+  id: ID!
+  target: Validator!
+  bundlesCollection: Collection!
+  bundlesWithRefundCollection: Collection!
+  fastBidsCollection: Collection!
+}
+
+type WeeklyValidatorSnapshot @entity {
+  "The week"
+  id: ID!
+  target: Validator!
+  bundlesCollection: Collection!
+  bundlesWithRefundCollection: Collection!
+  fastBidsCollection: Collection!
+}
+
+type Searcher @entity {
+  id: Bytes!
+  address: Bytes!
+
+  bundlesLanded: BigInt!
+  bundlesWithRefundLanded: BigInt!
+  fastBidsLanded: BigInt!
+
+  totalTipped: BigInt!
+
+  totalBundlesTipped: BigInt!
+  totalBundlesWithRefundTipped: BigInt!
+  totalFastBidsTipped: BigInt!
+
+  lastBundleLandedTimestamp: Int!
+  lastBundleWithRefundLandedTimestamp: Int!
+  lastFastBidLandedTimestamp: Int!
+
+  bundles: [RelayFlashBid!]! @derivedFrom(field: "sender")
+  bundlesWithRefund: [RelayFlashBidWithRefund!]! @derivedFrom(field: "sender")
+  fastBids: [RelayFastBid!]! @derivedFrom(field: "sender")
+}
+
+type Validator @entity {
+  id: Bytes!
+  address: Bytes!
+
+  totalTips: BigInt!
+
+  totalBundlesTips: BigInt!
+  totalBundlesWithRefundTips: BigInt!
+  totalFastBidsTips: BigInt!
+
+  totalExecutedBundlesCount: BigInt!
+  totalExecutedBundlesWithRefundCount: BigInt!
+  totalExecutedFastBidsCount: BigInt!
+
+  lastBundleReceivedTimestamp: Int!
+  lastBundleWithRefundReceivedTimestamp: Int!
+  lastFastBidReceivedTimestamp: Int!
+
+  hourlyValidatorSnapshot: [HourlyValidatorSnapshot!]! @derivedFrom(field: "target")
+  dailyValidatorSnapshot: [DailyValidatorSnapshot!]! @derivedFrom(field: "target")
+  weeklyValidatorSnapshot: [WeeklyValidatorSnapshot!]! @derivedFrom(field: "target")
+
+  bundles: [RelayFlashBid!]! @derivedFrom(field: "validator")
+  bundlesWithRefund: [RelayFlashBidWithRefund!]! @derivedFrom(field: "validator")
+  fastBids: [RelayFastBid!]! @derivedFrom(field: "validator")
 }
 
 type RelayFastBid @entity(immutable: true) {
   id: Bytes!
-  sender: Bytes! # address
-  validator: Bytes! # address
+  sender: Searcher! # address
+  validator: Validator! # address
   success: Boolean! # bool
   bidAmount: BigInt! # uint256
   searcherContractAddress: Bytes! # address
@@ -23,21 +139,11 @@ type RelayFastBid @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type RelayFeeCollected @entity(immutable: true) {
-  id: Bytes!
-  payor: Bytes! # address
-  payee: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
 type RelayFlashBid @entity(immutable: true) {
   id: Bytes!
-  sender: Bytes! # address
+  sender: Searcher! # address
   oppTxHash: Bytes! # bytes32
-  validator: Bytes! # address
+  validator: Validator! # address
   bidAmount: BigInt! # uint256
   amountPaid: BigInt! # uint256
   searcherContractAddress: Bytes! # address
@@ -48,79 +154,14 @@ type RelayFlashBid @entity(immutable: true) {
 
 type RelayFlashBidWithRefund @entity(immutable: true) {
   id: Bytes!
-  sender: Bytes! # address
+  sender: Searcher! # address
   oppTxHash: Bytes! # bytes32
-  validator: Bytes! # address
+  validator: Validator! # address
   bidAmount: BigInt! # uint256
   amountPaid: BigInt! # uint256
   searcherContractAddress: Bytes! # address
   refundedAmount: BigInt! # uint256
   refundAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RelayInvestigateOutcome @entity(immutable: true) {
-  id: Bytes!
-  validator: Bytes! # address
-  sender: Bytes! # address
-  blockNumber: BigInt! # uint256
-  existingBidAmount: BigInt! # uint256
-  newBidAmount: BigInt! # uint256
-  existingGasPrice: BigInt! # uint256
-  newGasPrice: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RelayProcessingPaidValidator @entity(immutable: true) {
-  id: Bytes!
-  validator: Bytes! # address
-  validatorPayment: BigInt! # uint256
-  initiator: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RelaySimulatedFlashBid @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  amount: BigInt! # uint256
-  oppTxHash: Bytes! # bytes32
-  validator: Bytes! # address
-  searcherContractAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RelayValidatorPayeeUpdated @entity(immutable: true) {
-  id: Bytes!
-  validator: Bytes! # address
-  payee: Bytes! # address
-  initiator: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RelayWithdrawStuckERC20 @entity(immutable: true) {
-  id: Bytes!
-  receiver: Bytes! # address
-  token: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RelayWithdrawStuckNativeToken @entity(immutable: true) {
-  id: Bytes!
-  receiver: Bytes! # address
-  amount: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
