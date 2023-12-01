@@ -166,3 +166,26 @@ type RelayFlashBidWithRefund @entity(immutable: true) {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
+
+type RelayProcessingPaidValidator @entity(immutable: true) {
+  id: Bytes!
+  validator: Validator! # address
+  validatorPayment: BigInt! # uint256
+  initiator: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type CustomPaymentProcessorPaid @entity(immutable: true) {
+  id: Bytes!
+  payor: Validator! # address
+  payee: Bytes! # address
+  paymentProcessor: Bytes! # address
+  totalAmount: BigInt! # uint256
+  startBlock: BigInt! # uint256
+  endBlock: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
