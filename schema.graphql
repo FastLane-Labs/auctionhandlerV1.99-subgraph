@@ -125,6 +125,9 @@ type Validator @entity {
   bundles: [RelayFlashBid!]! @derivedFrom(field: "validator")
   bundlesWithRefund: [RelayFlashBidWithRefund!]! @derivedFrom(field: "validator")
   fastBids: [RelayFastBid!]! @derivedFrom(field: "validator")
+
+  standardPayments: [RelayProcessingPaidValidator!]! @derivedFrom(field: "validator")
+  customPayments: [CustomPaymentProcessorPaid!]! @derivedFrom(field: "payor")
 }
 
 type RelayFastBid @entity(immutable: true) {
