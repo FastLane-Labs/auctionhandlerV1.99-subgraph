@@ -1309,6 +1309,26 @@ export class Validator extends Entity {
       "fastBids"
     );
   }
+
+  get standardPayments(): RelayProcessingPaidValidatorLoader {
+    return new RelayProcessingPaidValidatorLoader(
+      "Validator",
+      this.get("id")!
+        .toBytes()
+        .toHexString(),
+      "standardPayments"
+    );
+  }
+
+  get customPayments(): CustomPaymentProcessorPaidLoader {
+    return new CustomPaymentProcessorPaidLoader(
+      "Validator",
+      this.get("id")!
+        .toBytes()
+        .toHexString(),
+      "customPayments"
+    );
+  }
 }
 
 export class RelayFastBid extends Entity {
@@ -2262,5 +2282,41 @@ export class WeeklyValidatorSnapshotLoader extends Entity {
   load(): WeeklyValidatorSnapshot[] {
     let value = store.loadRelated(this._entity, this._id, this._field);
     return changetype<WeeklyValidatorSnapshot[]>(value);
+  }
+}
+
+export class RelayProcessingPaidValidatorLoader extends Entity {
+  _entity: string;
+  _field: string;
+  _id: string;
+
+  constructor(entity: string, id: string, field: string) {
+    super();
+    this._entity = entity;
+    this._id = id;
+    this._field = field;
+  }
+
+  load(): RelayProcessingPaidValidator[] {
+    let value = store.loadRelated(this._entity, this._id, this._field);
+    return changetype<RelayProcessingPaidValidator[]>(value);
+  }
+}
+
+export class CustomPaymentProcessorPaidLoader extends Entity {
+  _entity: string;
+  _field: string;
+  _id: string;
+
+  constructor(entity: string, id: string, field: string) {
+    super();
+    this._entity = entity;
+    this._id = id;
+    this._field = field;
+  }
+
+  load(): CustomPaymentProcessorPaid[] {
+    let value = store.loadRelated(this._entity, this._id, this._field);
+    return changetype<CustomPaymentProcessorPaid[]>(value);
   }
 }
