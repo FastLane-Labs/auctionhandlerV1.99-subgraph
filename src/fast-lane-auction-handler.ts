@@ -2,9 +2,18 @@ import { BigInt, Bytes, log } from "@graphprotocol/graph-ts";
 import {
   RelayFastBid as RelayFastBidEvent,
   RelayFlashBid as RelayFlashBidEvent,
-  RelayFlashBidWithRefund as RelayFlashBidWithRefundEvent
+  RelayFlashBidWithRefund as RelayFlashBidWithRefundEvent,
+  RelayProcessingPaidValidator as RelayProcessingPaidValidatorEvent,
+  CustomPaymentProcessorPaid as CustomPaymentProcessorPaidEvent
 } from "../generated/FastLaneAuctionHandler/FastLaneAuctionHandler";
-import { Collection, RelayFastBid, RelayFlashBid, RelayFlashBidWithRefund } from "../generated/schema";
+import {
+  Collection,
+  RelayFastBid,
+  RelayFlashBid,
+  RelayFlashBidWithRefund,
+  RelayProcessingPaidValidator,
+  CustomPaymentProcessorPaid
+} from "../generated/schema";
 
 import { ONE, STATS_ID, HOURLY_VAL, DAILY_VAL, WEEKLY_VAL } from "./helpers/common";
 import { loadOrCreateGlobalStats } from "./helpers/loadOrCreateGlobalStats";
@@ -408,4 +417,33 @@ export function handleRelayFlashBidWithRefund(event: RelayFlashBidWithRefundEven
   updateHourly(null, event, null, event.params.amountPaid, HOURLY_VAL as i32);
   updateDaily(null, event, null, event.params.amountPaid, DAILY_VAL as i32);
   updateWeekly(null, event, null, event.params.amountPaid, WEEKLY_VAL as i32);
+}
+
+export function handleRelayProcessingPaidValidator(event: RelayProcessingPaidValidatorEvent): void {
+  let entity = new RelayProcessingPaidValidator(event.transaction.hash.concatI32(event.logIndex.toI32()));
+  entity.validator = event.params.validator;
+  entity.validatorPayment = event.params.validatorPayment;
+  entity.initiator = event.params.initiator;
+
+  entity.blockNumber = event.block.number;
+  entity.blockTimestamp = event.block.timestamp;
+  entity.transactionHash = event.transaction.hash;
+
+  entity.save();
+}
+
+export function handleCustomPaymentProcessorPaid(event: CustomPaymentProcessorPaidEvent): void {
+  let entity = new CustomPaymentProcessorPaid(event.transaction.hash.concatI32(event.logIndex.toI32()));
+  entity.payor = event.params.payor;
+  entity.payee = event.params.payee;
+  entity.paymentProcessor = event.params.paymentProcessor;
+  entity.totalAmount = event.params.totalAmount;
+  entity.startBlock = event.params.startBlock;
+  entity.endBlock = event.params.endBlock;
+
+  entity.blockNumber = event.block.number;
+  entity.blockTimestamp = event.block.timestamp;
+  entity.transactionHash = event.transaction.hash;
+
+  entity.save();
 }

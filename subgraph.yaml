@@ -17,6 +17,8 @@ dataSources:
         - RelayFastBid
         - RelayFlashBid
         - RelayFlashBidWithRefund
+        - RelayProcessingPaidValidator
+        - CustomPaymentProcessorPaid
       abis:
         - name: FastLaneAuctionHandler
           file: ./abis/FastLaneAuctionHandler.json
@@ -27,4 +29,8 @@ dataSources:
           handler: handleRelayFlashBid
         - event: RelayFlashBidWithRefund(indexed address,indexed bytes32,indexed address,uint256,uint256,address,uint256,address)
           handler: handleRelayFlashBidWithRefund
+        - event: RelayProcessingPaidValidator(indexed address,uint256,indexed address)
+          handler: handleRelayProcessingPaidValidator
+        - event: CustomPaymentProcessorPaid(indexed address,indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleCustomPaymentProcessorPaid
       file: ./src/fast-lane-auction-handler.ts
